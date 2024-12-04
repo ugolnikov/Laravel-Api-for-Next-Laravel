@@ -24,21 +24,21 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            // 'email_verified_at' => now(),
+            'password' => bcrypt('password'), // Используется простой пароль
             'remember_token' => Str::random(10),
+            'role' => 'customer', // По умолчанию роль - покупатель
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function seller() // Метод для создания продавца
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'seller',
+            ];
+        });
     }
 }
