@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerProductController extends Controller
 {
-    // Показываем все товары продавца
     public function index()
     {
         $products = Auth::user()->products()->paginate(10);
@@ -16,7 +15,6 @@ class SellerProductController extends Controller
         return response()->json($products);
     }
 
-    // Создание нового товара
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -49,7 +47,6 @@ class SellerProductController extends Controller
         return response()->json(['message' => 'Product created successfully.', 'product' => $product], 201);
     }
 
-    // Обновление товара
     public function update(Request $request, Product $product)
     {
         $this->authorize('update', $product);
@@ -83,7 +80,6 @@ class SellerProductController extends Controller
         return response()->json(['message' => 'Product updated successfully.', 'product' => $product], 200);
     }
 
-    // Удаление товара
     public function destroy(Product $product)
     {
         $this->authorize('delete', $product);

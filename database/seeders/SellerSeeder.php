@@ -2,23 +2,23 @@
 
 namespace Database\Seeders;
 
-namespace Database\Seeders;
-
+use App\Models\Seller;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Illuminate\Support\Str;
 
 class SellerSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Создаем 10 продавцов
-        User::factory()->count(10)->create([
-            'role' => 'seller',
-            'email' => function ($user) {
-                return 'seller' . Str::random(5) . '@example.com'; 
-            },
+        // Создаем тестового продавца с известными данными
+        Seller::factory()->create([
+            'email' => 'seller@example.com',
+            'password' => bcrypt('password'),
+            'company_name' => 'Test Company',
+            'inn' => '123456789012',
         ]);
+
+        // Создаем остальных случайных продавцов
+        Seller::factory()->count(9)->create();
 
         $this->command->info('10 sellers have been created successfully!');
     }

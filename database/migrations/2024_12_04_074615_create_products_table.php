@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->text('full_description');
             $table->string('image_preview')->nullable();
             $table->json('images')->nullable();
-            $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('seller_id')->constrained('sellers')->onDelete('cascade');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
         });

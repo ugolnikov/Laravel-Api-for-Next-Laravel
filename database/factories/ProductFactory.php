@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Seller;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
@@ -23,7 +24,8 @@ class ProductFactory extends Factory
                 $this->faker->imageUrl(400, 400, 'products', true),
                 $this->faker->imageUrl(400, 400, 'products', true),
             ]),
-            'is_published' => $this->faker->boolean(70), // 70% вероятность публикации
+            'is_published' => $this->faker->boolean(80),
+            'seller_id' => Seller::inRandomOrder()->first()->id
         ];
     }
 }

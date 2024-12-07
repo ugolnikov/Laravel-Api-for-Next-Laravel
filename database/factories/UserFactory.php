@@ -26,19 +26,9 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            // 'email_verified_at' => now(),
-            'password' => bcrypt('password'), // Используется простой пароль
+            'password' => bcrypt('password'), 
             'remember_token' => Str::random(10),
-            'role' => 'customer', // По умолчанию роль - покупатель
+            'role' => 'customer', 
         ];
-    }
-
-    public function seller() // Метод для создания продавца
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'role' => 'seller',
-            ];
-        });
     }
 }

@@ -6,22 +6,6 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $query = Product::where('is_published', true);
-
-    //     if ($request->has('search')) {
-    //         $query->where(function ($q) use ($request) {
-    //             $q->where('name', 'like', '%' . $request->search . '%')
-    //               ->orWhereHas('seller', function ($q) use ($request) {
-    //                   $q->where('name', 'like', '%' . $request->search . '%');
-    //               });
-    //         });
-    //     }
-
-    //     $products = $query->paginate(5);
-    //     return response()->json($products);
-    // }
     public function index(Request $request)
     {
         $query = Product::query();
@@ -33,19 +17,25 @@ class ProductController extends Controller
         if ($request->has('search')) {
         $query->where('name', 'like', '%' . $request->search . '%');
         }
-
+        $query->published();
         $products = $query->paginate(12);
 
         return response()->json($products);
     }
 
 
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::with('seller')
+            ->where('id', $id)
+            ->firstOrFail();
+
         if (!$product->is_published) {
             abort(404);
         }
 
-        return response()->json($product);
+        return response()->json([
+            'data' => $product,
+        ]);
     }
 }
