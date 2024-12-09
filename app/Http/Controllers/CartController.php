@@ -70,11 +70,11 @@ class CartController extends Controller
     {
         $cartItem = Cart::find($cartId);
         if ($cartItem && $cartItem->user_id === Auth::id()) {
-            $cartItem->delete();
+            $cartItem->delete(); 
             return response()->json(['message' => 'Item removed from cart']);
         }
 
-        return response()->json(['error' => 'Item not found or unauthorized'], 404);
+        return response()->json(['error' => 'Item not found or unauthorized'], 454);
     }
 
     public function updateQuantity(Request $request, $cartId)
