@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('role')->default('seller');
             $table->string('company_name', 200);
             $table->string('inn', 12)->unique();
             $table->text('address');
