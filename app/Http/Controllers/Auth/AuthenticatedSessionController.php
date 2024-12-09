@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,8 +28,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        Auth::guard('web')->logout();
+        $authData = [];
+        if (Auth::guard('web')->check()) {
+            $authData['web'] = 'auth web';
+        }
+        if (Auth::guard('sell')->check()) {
+            $authData['sell'] = 'auth sell';
+        }
+        Log::debug('Auth', $authData);
 
+
+        if(Auth::guard(name: 'web')->check()){
+            Auth::guard('web')->logout();
+        };
+        if(Auth::guard(name: 'sell')->check()){
+            Auth::guard('sell')->logout();
+        };
+        Log::debug('session', [$request->session()]);
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();

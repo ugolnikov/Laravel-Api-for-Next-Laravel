@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -24,5 +23,5 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->name('password.store');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
+    ->middleware('auth:sanctum')
     ->name('logout');

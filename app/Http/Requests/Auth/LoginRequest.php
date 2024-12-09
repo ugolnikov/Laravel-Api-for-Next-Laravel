@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -37,7 +38,7 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate()
+    public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
         if (Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
@@ -47,7 +48,6 @@ class LoginRequest extends FormRequest
         if (Auth::guard('sell')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             return;
         }
-
         RateLimiter::hit($this->throttleKey());
         RateLimiter::clear($this->throttleKey());
         throw ValidationException::withMessages([
