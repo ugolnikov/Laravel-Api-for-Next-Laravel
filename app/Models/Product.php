@@ -9,14 +9,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    /**
-     * Название таблицы в базе данных (если отличается от имени модели)
-     */
     protected $table = 'products';
-
-    /**
-     * Массово заполняемые поля
-     */
     protected $fillable = [
         'name',
         'price',
@@ -29,33 +22,22 @@ class Product extends Model
         'seller_id',
     ];
 
-    /**
-     * Типы полей для кастинга
-     */
     protected $casts = [
-        'images' => 'array', // Автоматическое преобразование JSON в массив
+        'images' => 'array',
         'is_published' => 'boolean',
     ];
 
-    /**
-     * Связь: Товар принадлежит продавцу
-     */
     public function seller()
     {
         return $this->belongsTo(Seller::class);
     }
 
-    /**
-     * Скопы для упрощения запросов
-     */
 
-    // Только опубликованные товары
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
     }
 
-    // Поиск по имени или описанию
     public function scopeSearch($query, $term)
     {
         return $query->where('name', 'like', "%{$term}%")

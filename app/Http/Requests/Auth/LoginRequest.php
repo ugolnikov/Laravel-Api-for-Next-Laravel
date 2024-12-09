@@ -44,7 +44,6 @@ class LoginRequest extends FormRequest
         if (Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             return;
         }
-
         if (Auth::guard('sell')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             return;
         }

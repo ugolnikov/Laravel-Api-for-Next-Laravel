@@ -17,6 +17,6 @@ class ProductSeeder extends Seeder
             return;
         }
 
-        Product::factory(50)->create();
+        Product::factory(45)->create();
     }
 }

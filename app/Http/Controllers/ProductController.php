@@ -18,7 +18,7 @@ class ProductController extends Controller
         $query->where('name', 'like', '%' . $request->search . '%');
         }
         $query->published();
-        $products = $query->paginate(12);
+        $products = $query->paginate(15);
 
         return response()->json($products);
     }
