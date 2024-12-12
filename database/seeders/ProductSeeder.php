@@ -18,5 +18,6 @@ class ProductSeeder extends Seeder
         }
 
         Product::factory(45)->create();
+        $this->command->info('45 products have been created successfully!');
     }
 }
