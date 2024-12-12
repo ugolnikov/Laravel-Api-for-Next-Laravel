@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class SellerAuthController extends Controller
@@ -126,4 +128,23 @@ class SellerAuthController extends Controller
             'user' => $user->load('seller')
         ]);
     }
-} 
+
+    public function uploadLogo(Request $request)
+    {
+        $request->validate([
+            'logo' => 'required|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoPath = $logo->store('logos', 'public'); // Store in 'storage/app/public/logos'
+            Log::debug('Image:',[$logo]);
+            Log::debug('Image:',[$logoPath]);
+            return response()->json(['logoUrl' => Storage::url($logoPath)]);
+        }
+
+        return response()->json(['message' => 'No file uploaded'], 400);
+
+
+    }
+}

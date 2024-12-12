@@ -7,10 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\SellerProductController;
 use App\Http\Controllers\Auth\SellerAuthController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\VerifyController;
 
 
 Route::get('/user', function (Request $request) {
@@ -26,7 +25,13 @@ Route::middleware('auth:web')->group(function () {
     Route::put('/cart/{id}', [CartController::class, 'updateCart']);
     Route::delete('/cart/{id}', [CartController::class, 'removeFromCart']);
 });
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::middleware('auth:sell')->group(function () {
+    Route::post('/upload/logo', [SellerAuthController::class, 'uploadLogo']);
+
+    Route::post('/validate/inn', [VerifyController::class, 'validateInn']);
+    Route::post('/validate/seller', [VerifyController::class, 'validateSeller']);
+
     Route::post('/change_role/seller', [RoleController::class, 'seller']);
     Route::post('/change_role/customer', [RoleController::class, 'customer']);
 });

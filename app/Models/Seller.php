@@ -19,7 +19,8 @@ class Seller extends Authenticatable
         'inn',
         'address',
         'phone',
-        'logo'
+        'logo',
+        'is_verify'
     ];
 
     protected $hidden = [
