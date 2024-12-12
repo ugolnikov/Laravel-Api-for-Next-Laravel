@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('role')->default('seller');
-            $table->string('company_name', 200);
-            $table->string('inn', 12)->unique();
-            $table->text('address');
+            $table->string('company_name', 200)->nullable();
+            $table->string('inn', 12)->unique()->nullable();
+            $table->text('address')->nullable();
             $table->string('phone', 100)->nullable();
             $table->string('logo')->nullable();
+            $table->boolean('is_verify')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

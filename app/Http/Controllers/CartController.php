@@ -70,7 +70,7 @@ class CartController extends Controller
     {
         $cartItem = Cart::find($cartId);
         if ($cartItem && $cartItem->user_id === Auth::id()) {
-            $cartItem->delete(); 
+            $cartItem->delete();
             return response()->json(['message' => 'Item removed from cart']);
         }
 
