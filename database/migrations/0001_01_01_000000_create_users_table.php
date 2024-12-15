@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone', 100)->nullable();
             $table->string('password');
             $table->string('role')->default('customer');
             $table->rememberToken();

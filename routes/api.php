@@ -25,22 +25,26 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::put('/cart/{id}', [CartController::class, 'updateCart']);
     Route::delete('/cart/{id}', [CartController::class, 'removeFromCart']);
-    // Заказы
-    Route::post('/orders', [OrderController::class, 'create']);
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::get('/orders/{order}', [OrderController::class, 'show']);
-    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+
 });
 
 Route::middleware('auth:sell')->group(function () {
+    // Валидация
     Route::post('/upload/logo', [SellerAuthController::class, 'uploadLogo']);
     Route::post('/validate/inn', [VerifyController::class, 'validateInn']);
     Route::post('/validate/seller', [VerifyController::class, 'validateSeller']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Смена роли
     Route::post('/change_role/seller', [RoleController::class, 'seller']);
     Route::post('/change_role/customer', [RoleController::class, 'customer']);
+    Route::post('/update-phone', [RoleController::class, 'phone']);
+    // Заказы
+    Route::post('/orders', [OrderController::class, 'create']);
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus']);
 });
 
 

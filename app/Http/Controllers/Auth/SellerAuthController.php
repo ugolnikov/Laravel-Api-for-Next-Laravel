@@ -137,9 +137,7 @@ class SellerAuthController extends Controller
 
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
-            $logoPath = $logo->store('logos', 'public'); // Store in 'storage/app/public/logos'
-            Log::debug('Image:',[$logo]);
-            Log::debug('Image:',[$logoPath]);
+            $logoPath = $logo->store('logos', 'public');
             return response()->json(['logoUrl' => Storage::url($logoPath)]);
         }
 

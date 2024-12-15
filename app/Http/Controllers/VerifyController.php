@@ -12,8 +12,21 @@ class VerifyController extends Controller
 {
     public function validateInn(Request $request)
     {
+        $innLength = strlen($request->inn);
         $request->validate([
-            'inn' => 'required|digits:10',
+            'inn' => [
+                'required',
+                'string',
+                'regex:/^\d+$/',
+                function ($attribute, $value, $fail) use ($innLength) {
+                    if ($innLength == 10) {
+                        return;
+                    } elseif ($innLength == 12) {
+                        return;
+                    }
+                    $fail('ИНН должен быть 10 знаков для организации или 12 знаков для ИП/физического лица.');
+                }
+            ],
         ]);
 
         $token = env('DADATA_API_KEY');
@@ -53,7 +66,6 @@ class VerifyController extends Controller
             'phone' => 'required|string|max:15',
             'logo' => 'string',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'error' => 'Ошибка валидации данных.',
@@ -63,7 +75,6 @@ class VerifyController extends Controller
 
 //        $seller = Seller::where('inn', $request->inn)->first();
         $seller = Auth::guard('sell')->user();
-
         if (!$seller) {
             return response()->json([
                 'error' => 'Компания с таким ИНН не найдена.',

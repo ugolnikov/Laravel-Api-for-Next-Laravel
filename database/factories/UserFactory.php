@@ -25,10 +25,11 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
+            'phone' => '+7' . $this->faker->numberBetween(900, 999) . $this->faker->numerify('#######'),
             'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('password'), 
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
-            'role' => 'customer', 
+            'role' => 'customer',
         ];
     }
 }

@@ -27,7 +27,7 @@ class RoleController extends Controller
                 'company_name' => NULL,
                 'inn'          => NULL,
                 'address'      => NULL,
-                'phone'        => NULL,
+                'phone'        => $user->phone || NULL,
                 'logo'         => NULL,
                 'is_verify'    => false,
                 'created_at'   => now(),
@@ -35,7 +35,12 @@ class RoleController extends Controller
             ]);
             DB::table('users')->where('id', $user->id)->delete();
         });
-
+        if(Auth::guard(name: 'sell')->check()){
+            Auth::guard('sell')->logout();
+        };
+        if(Auth::guard(name: 'web')->check()){
+            Auth::guard('web')->logout();
+        };
         return response()->json(['message' => 'Роль изменена на продавца.', 'role' => 'seller']);
     }
 
@@ -51,6 +56,7 @@ class RoleController extends Controller
             DB::table('users')->insert([
                 'name'         => $user->name,
                 'email'        => $user->email,
+                'phone'        => $user->phone || NULL,
                 'password'     => $user->password,
                 'role'         => 'customer',
                 'created_at'   => now(),
@@ -58,7 +64,19 @@ class RoleController extends Controller
             ]);
             DB::table('sellers')->where('id', $user->id)->delete();
         });
-
+        if(Auth::guard(name: 'sell')->check()){
+            Auth::guard('sell')->logout();
+        };
+        if(Auth::guard(name: 'web')->check()){
+            Auth::guard('web')->logout();
+        };
         return response()->json(['message' => 'Роль изменена на покупателя.', 'role' => 'customer']);
+    }
+    public function phone(Request $request)
+    {
+        $user = Auth::guard('sanctum')->user();
+        $newPhone = $request->phone;
+        $user->update(['phone' => $newPhone]);
+        return response()->json(['message' => 'Телефон успешно обновлен.']);
     }
 }

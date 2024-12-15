@@ -20,7 +20,7 @@ class SellerFactory extends Factory
             'company_name' => $this->faker->company(),
             'inn' => $this->faker->numerify('############'),
             'address' => $this->faker->address,
-            'phone' => $this->faker->phoneNumber,
+            'phone' => '+7' . $this->faker->numberBetween(900, 999) . $this->faker->numerify('#######'),
             'logo' => $this->faker->imageUrl(200, 200, 'seller', true),
         ];
     }
