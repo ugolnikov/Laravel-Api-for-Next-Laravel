@@ -28,7 +28,11 @@ class VerifyController extends Controller
                 }
             ],
         ]);
+        $existingSeller = Seller::where('inn', $request->inn)->first();
 
+        if ($existingSeller) {
+            return response()->json(['error' => 'Продавец с таким ИНН уже существует.'], 409);
+        }
         $token = env('DADATA_API_KEY');
         $dadata = new \Dadata\DadataClient($token, null);
 

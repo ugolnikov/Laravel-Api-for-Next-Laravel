@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('full_name');
-            $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

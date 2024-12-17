@@ -15,6 +15,7 @@ class SellerSeeder extends Seeder
             'password' => bcrypt('password'),
             'company_name' => 'Test Company',
             'inn' => '123456789012',
+            'is_verify' => true
         ]);
 
         // Создаем остальных случайных продавцов

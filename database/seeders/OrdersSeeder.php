@@ -25,7 +25,7 @@ class OrdersSeeder extends Seeder
         $firstOrder = Order::factory()->create([
             'user_id' => 1,
             'order_number' => 'ORD-' . Str::upper(Str::random(10)),
-            'total_amount' => 2500,
+            'total_amount' => 9999,
             'email' => 'user@example.com',
             'full_name' => User::find(1)?->name,
             'phone' => '+79519383935',
@@ -33,33 +33,24 @@ class OrdersSeeder extends Seeder
             'status' => 'pending'
         ]);
 
-        // Добавляем товары к первому заказу
-        $testProducts = Product::inRandomOrder()->limit(2)->get();
-        foreach ($testProducts as $product) {
-            $quantity = 1;
-            $price = $product->price;
-            $total = $price * $quantity;
+        $product = $products->first();
+        OrderItem::create([
+            'order_id' => $firstOrder->id,
+            'product_id' => $product->id,
+            'seller_id' => $product->seller_id,
+            'quantity' => 1,
+            'price' => 9999,
+            'total' => 9999
+        ]);
 
-            OrderItem::create([
-                'order_id' => $firstOrder->id,
-                'product_id' => $product->id,
-                'seller_id' => $product->seller_id,
-                'quantity' => $quantity,
-                'price' => $price,
-                'total' => $total
-            ]);
-        }
-
-        // Обновляем total_amount первого заказа
-        $firstOrder->total_amount = $firstOrder->items->sum('total');
         $firstOrder->save();
 
         // Создаем остальные заказы
-        Order::factory()
-            ->count(20)
-            ->create([
-                'user_id' => fn () => $users->random()->id,
-            ]);
+//        Order::factory()
+//            ->count(20)
+//            ->create([
+//                'user_id' => fn () => $users->random()->id,
+//            ]);
 
         $this->command->info('Orders have been created successfully with their items!');
     }

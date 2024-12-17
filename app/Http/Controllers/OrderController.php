@@ -84,8 +84,6 @@ class OrderController extends Controller
                 ], 201);
             });
         } catch (\Exception $e) {
-            Log::error('Ошибка при создании заказа', [$e]);
-            Log::debug('Запрос', [$request->all()]);
             return response()->json([
                 'message' => 'Ошибка при создании заказа',
                 'error' => $e->getMessage()
@@ -105,29 +103,13 @@ class OrderController extends Controller
     }
 
     // Обновление статуса заказа
-    public function updateStatus(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,paid,shipped,completed,cancelled',
-        ]);
 
-        $order = Order::findOrFail($id);
-
-        if ($order->user_id != auth()->id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        $order->status = $validated['status'];
-        $order->save();
-
-        return response()->json($order);
-    }
 
     // Получение конкретного заказа
     public function show($orderNumber)
     {
         $order = Order::with(['items.product' => function ($query) {
-            $query->select('id', 'name', 'price', 'images');
+            $query->select('id', 'name', 'price', 'images', 'image_preview');
         }])
             ->where('order_number', $orderNumber)
             ->firstOrFail();
@@ -136,7 +118,6 @@ class OrderController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        // Преобразуем данные заказа в нужный формат
         $orderData = [
             'order_number' => $order->order_number,
             'status' => $order->status,
@@ -149,11 +130,13 @@ class OrderController extends Controller
             'items' => collect($order->items)->map(function ($item) {
                 return [
                     'quantity' => $item->quantity,
+                    'is_send' => $item->is_send,
                     'product' => [
                         'id' => $item->product->id,
                         'name' => $item->product->name,
                         'price' => $item->product->price,
-                        'images' => $item->product->images
+                        'images' => $item->product->images,
+                        'image_preview' => $item->product->image_preview
                     ]
                 ];
             })->values()->all()
@@ -179,5 +162,22 @@ class OrderController extends Controller
         $orders = $seller->orders;
 
         return response()->json($orders);
+    }
+    public function statusChange(Request $request)
+    {
+        $orderNumber = $request->orderNumber;
+        $status = $request->status;
+        $order = Order::with(['items.product' => function ($query) {
+            $query->select('id', 'name', 'price', 'images');
+        }])
+            ->where('order_number', $orderNumber)
+            ->firstOrFail();
+        if ($order->user_id != auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        $order->status = $status;
+        $order->save();
+
+        return response()->json(['message' => 'Заказ успешно доставлен'], 200);
     }
 }

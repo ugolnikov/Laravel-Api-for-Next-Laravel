@@ -12,6 +12,7 @@ class OrderItem extends Model
         'product_id',
         'seller_id',
         'quantity',
+        'is_send',
         'price',
         'total'
     ];
@@ -28,5 +29,12 @@ class OrderItem extends Model
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class);
+    }
+    public function updateShippingStatus($status)
+    {
+        $this->is_send = $status;
+        $this->save();
+
+        $this->order->updateOrderStatus();
     }
 }

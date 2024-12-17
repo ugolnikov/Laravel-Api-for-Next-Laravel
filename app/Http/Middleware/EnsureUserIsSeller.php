@@ -10,10 +10,12 @@ class EnsureUserIsSeller
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user() instanceof Seller) {
+        $user = $request->user();
+        
+        if ($user instanceof Seller) {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Доступ запрещен'], 403);
+        return response()->json(['message' => 'Доступ запрещен. Требуются права продавца.'], 403);
     }
 } 

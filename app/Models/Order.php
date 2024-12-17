@@ -32,4 +32,15 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+    public function updateOrderStatus()
+    {
+        $allItemsSent = $this->items->every(function ($orderItem) {
+            return $orderItem->is_send === true;
+        });
+
+        if ($allItemsSent) {
+            $this->status = 'shipped';
+            $this->save();
+        }
+    }
 }

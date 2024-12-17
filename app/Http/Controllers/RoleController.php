@@ -27,7 +27,7 @@ class RoleController extends Controller
                 'company_name' => NULL,
                 'inn'          => NULL,
                 'address'      => NULL,
-                'phone'        => $user->phone || NULL,
+                'phone'        => $user->phone,
                 'logo'         => NULL,
                 'is_verify'    => false,
                 'created_at'   => now(),
@@ -56,7 +56,7 @@ class RoleController extends Controller
             DB::table('users')->insert([
                 'name'         => $user->name,
                 'email'        => $user->email,
-                'phone'        => $user->phone || NULL,
+                'phone'        => $user->phone,
                 'password'     => $user->password,
                 'role'         => 'customer',
                 'created_at'   => now(),

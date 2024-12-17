@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Product;
+use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -11,47 +12,47 @@ class ProductPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(Seller $seller): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Product $product): bool
+    public function view(Seller $seller, Product $product): bool
     {
-        return false;
+        return $seller->id === $product->seller_id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(Seller $seller): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Product $product): bool
+    public function update(Seller $seller, Product $product): bool
     {
-        return $user->id === $product->seller_id;
+        return $seller->id === $product->seller_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $product): bool
+    public function delete(Seller $seller, Product $product): bool
     {
-        return $user->id === $product->seller_id;
+        return $seller->id === $product->seller_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Product $product): bool
+    public function restore(Seller $seller, Product $product): bool
     {
         return false;
     }
@@ -59,7 +60,7 @@ class ProductPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Product $product): bool
+    public function forceDelete(Seller $seller, Product $product): bool
     {
         return false;
     }
