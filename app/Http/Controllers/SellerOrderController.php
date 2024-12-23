@@ -39,7 +39,7 @@ class SellerOrderController extends Controller
         $orderItem = OrderItem::findOrFail($orderItemId);
 
         if ($request->has('is_send')) {
-            $orderItem->is_send = $request->is_send ? 'true' : 'false';
+            $orderItem->is_send = $request->is_send ? 1 : 0;
             $orderItem->save();
             $orderItem->order->updateOrderStatus();
 
